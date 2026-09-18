@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">MiPokedex</string>
+
+    <string name="pokemon_name">Pikachu</string>
+    <string name="pokemon_number">#025</string>
+    <string name="pokemon_type">Eléctrico</string>
+
+    <string name="label_height">Altura</string>
+    <string name="pokemon_height">0,4m</string>
+    <string name="label_weight">Peso</string>
+    <string name="pokemon_weight">6,0kg</string>
+    <string name="label_ability">Habilidad</string>
+    <string name="pokemon_ability">Elec. Estática</string>
+
+    <string name="pokemon_description">Cuando se enfada, este Pokémon descarga la energía que almacena en el interior de las bolsas de las mejillas.</string>
+
+    <string name="prev_pokemon">Arbok N.º 0024</string>
+    <string name="next_pokemon">Raichu N.º 0026</string>
+
+    <string name="cd_favorite">Marcar como favorito</string>
+    <string name="cd_pokemon_image">Imagen de Pikachu</string>
+    <string name="cd_prev_pokemon_image">Imagen de Arbok</string>
+    <string name="cd_next_pokemon_image">Imagen de Raichu</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pokébola "hueca": la mitad inferior y el botón dejan ver el fondo -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Mitad superior roja, sin el hueco del botón -->
+    <path
+        android:fillColor="@color/pokeball_red"
+        android:pathData="M4.5,50 A45.5,45.5 0 0 1 95.5,50 L67,50 A17,17 0 0 0 33,50 Z" />
+    <!-- Contorno -->
+    <path
+        android:pathData="M50,2.5 A47.5,47.5 0 1 1 50,97.5 A47.5,47.5 0 1 1 50,2.5 Z"
+        android:strokeColor="@color/icon_dark"
+        android:strokeWidth="5" />
+    <!-- Franja central, a ambos lados del botón -->
+    <path
+        android:fillColor="@color/icon_dark"
+        android:pathData="M4,47 H31 V53 H4 Z M69,47 H96 V53 H69 Z" />
+    <!-- Botón -->
+    <path
+        android:pathData="M50,33 A17,17 0 1 1 50,67 A17,17 0 1 1 50,33 Z"
+        android:strokeColor="@color/icon_dark"
+        android:strokeWidth="6" />
+</vector>
