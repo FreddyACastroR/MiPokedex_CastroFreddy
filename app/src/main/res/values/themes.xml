@@ -1,18 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MiPokedex" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
-
-    <!-- La pantalla se ve igual en modo claro y oscuro, por eso se personaliza aquí. -->
-    <style name="Theme.MiPokedex" parent="Base.Theme.MiPokedex">
-        <item name="colorPrimary">@color/pokedex_yellow</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/pokedex_red</item>
-        <item name="colorOnSecondary">@color/white</item>
+<resources>
+    <!-- Los colores y textos de la pantalla viven en ui/theme (Compose). Este tema solo
+         pinta la ventana de amarillo para que no haya un destello blanco al abrir la app. -->
+    <style name="Theme.MiPokedex" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@color/pokedex_yellow</item>
-        <item name="android:textColorPrimary">@color/text_primary</item>
-        <item name="android:textColorSecondary">@color/text_secondary</item>
     </style>
 </resources>

@@ -1,20 +1,25 @@
 package freddy.castro.mipokedex
 
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import freddy.castro.mipokedex.data.PokedexData
+import freddy.castro.mipokedex.ui.PokedexScreen
+import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // La pantalla siempre es clara, así que los íconos de las barras del sistema van oscuros
+        val lightBars = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+        enableEdgeToEdge(statusBarStyle = lightBars, navigationBarStyle = lightBars)
+        setContent {
+            MiPokedexTheme {
+                PokedexScreen(PokedexData.pikachuEntry)
+            }
         }
     }
 }
