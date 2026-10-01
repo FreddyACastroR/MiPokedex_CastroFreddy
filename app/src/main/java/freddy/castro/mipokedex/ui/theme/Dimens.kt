@@ -21,6 +21,13 @@ object Dimens {
     val ChipPaddingHorizontal = 10.dp
     val ChipPaddingVertical = 4.dp
 
+    // Fila de la lista de Pokémon
+    val RowPadding = 10.dp
+    val RowImageWidth = 80.dp
+    val RowTextSpacing = 2.dp
+    val NumberPaddingHorizontal = 5.dp
+    val NumberPaddingVertical = 2.dp
+
     // La pokébola se sale por la derecha de la pantalla
     val PokeballOffsetX = 20.dp
     val PokeballOffsetY = 44.dp

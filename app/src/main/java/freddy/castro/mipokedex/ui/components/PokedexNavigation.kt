@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import freddy.castro.mipokedex.R
 import freddy.castro.mipokedex.data.PokedexData
-import freddy.castro.mipokedex.data.Pokemon
+import freddy.castro.mipokedex.data.PokemonSummary
 import freddy.castro.mipokedex.ui.theme.Dimens
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
@@ -30,7 +30,11 @@ enum class NavDirection(@DrawableRes val arrow: Int) {
 
 /** Pokémon anterior en la esquina izquierda y siguiente en la derecha. */
 @Composable
-fun PokedexNavigation(previous: Pokemon, next: Pokemon, modifier: Modifier = Modifier) {
+fun PokedexNavigation(
+    previous: PokemonSummary,
+    next: PokemonSummary,
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -44,7 +48,11 @@ fun PokedexNavigation(previous: Pokemon, next: Pokemon, modifier: Modifier = Mod
 
 /** Imagen de un Pokémon vecino con su nombre, número y la flecha de navegación. */
 @Composable
-fun NeighborPokemon(pokemon: Pokemon, direction: NavDirection, modifier: Modifier = Modifier) {
+fun NeighborPokemon(
+    pokemon: PokemonSummary,
+    direction: NavDirection,
+    modifier: Modifier = Modifier,
+) {
     val name = stringResource(pokemon.name)
     Column(
         modifier = modifier,

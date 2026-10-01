@@ -3,9 +3,9 @@ package freddy.castro.mipokedex.data
 import freddy.castro.mipokedex.R
 
 object PokedexData {
-    val arbok = Pokemon(R.string.arbok, 24, R.drawable.arbok)
-    val pikachu = Pokemon(R.string.pikachu, 25, R.drawable.pikachu)
-    val raichu = Pokemon(R.string.raichu, 26, R.drawable.raichu)
+    val arbok = PokemonSummary(R.string.arbok, 24, R.drawable.arbok)
+    val pikachu = PokemonSummary(R.string.pikachu, 25, R.drawable.pikachu)
+    val raichu = PokemonSummary(R.string.raichu, 26, R.drawable.raichu)
 
     val pikachuEntry = PokedexEntry(
         pokemon = pikachu,

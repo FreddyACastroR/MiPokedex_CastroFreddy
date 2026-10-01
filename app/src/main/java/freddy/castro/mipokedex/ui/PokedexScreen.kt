@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import freddy.castro.mipokedex.R
 import freddy.castro.mipokedex.data.PokedexData
 import freddy.castro.mipokedex.data.PokedexEntry
-import freddy.castro.mipokedex.data.Pokemon
+import freddy.castro.mipokedex.data.PokemonSummary
 import freddy.castro.mipokedex.ui.components.PokedexCard
 import freddy.castro.mipokedex.ui.components.PokedexHeader
 import freddy.castro.mipokedex.ui.components.PokedexNavigation
@@ -89,7 +89,7 @@ fun PokedexScreen(entry: PokedexEntry, modifier: Modifier = Modifier) {
 
 /** Imagen principal: va del 10 % al 33.5 % del alto, encimada sobre el borde de la tarjeta. */
 @Composable
-private fun PokemonPortrait(pokemon: Pokemon, modifier: Modifier = Modifier) {
+private fun PokemonPortrait(pokemon: PokemonSummary, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

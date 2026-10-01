@@ -26,7 +26,7 @@ fun TypeChip(type: PokemonType, modifier: Modifier = Modifier) {
                 vertical = Dimens.ChipPaddingVertical,
             ),
         color = Color.Black,
-        style = MaterialTheme.typography.labelLarge,
+        style = MaterialTheme.typography.labelSmall,
     )
 }
 

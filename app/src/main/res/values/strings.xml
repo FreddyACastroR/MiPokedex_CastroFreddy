@@ -12,6 +12,11 @@
     <string name="cd_pokemon_image">Imagen de %1$s</string>
     <string name="cd_favorite">Marcar como favorito</string>
 
+    <!-- Lista de Pokémon (sus datos vienen en inglés) -->
+    <string name="row_height">Height: %1$s</string>
+    <string name="row_weight">Weight: %1$s</string>
+    <string name="cd_row_image">%1$s image</string>
+
     <!-- Tipos -->
     <string name="type_electric">Eléctrico</string>
 

@@ -12,7 +12,7 @@ enum class PokemonType(@StringRes val label: Int, val color: Color) {
 }
 
 /** Lo mínimo para mostrar un Pokémon: nombre, número e imagen. */
-data class Pokemon(
+data class PokemonSummary(
     @StringRes val name: Int,
     val number: Int,
     @DrawableRes val image: Int,
@@ -20,12 +20,12 @@ data class Pokemon(
 
 /** Ficha completa que muestra la Pokédex, junto con el Pokémon anterior y el siguiente. */
 data class PokedexEntry(
-    val pokemon: Pokemon,
+    val pokemon: PokemonSummary,
     val type: PokemonType,
     @StringRes val height: Int,
     @StringRes val weight: Int,
     @StringRes val ability: Int,
     @StringRes val description: Int,
-    val previous: Pokemon,
-    val next: Pokemon,
+    val previous: PokemonSummary,
+    val next: PokemonSummary,
 )

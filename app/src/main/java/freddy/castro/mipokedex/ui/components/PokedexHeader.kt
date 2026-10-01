@@ -17,13 +17,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import freddy.castro.mipokedex.R
 import freddy.castro.mipokedex.data.PokedexData
-import freddy.castro.mipokedex.data.Pokemon
+import freddy.castro.mipokedex.data.PokemonSummary
 import freddy.castro.mipokedex.ui.theme.Dimens
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
 /** Nombre y número del Pokémon a la izquierda y la estrella de favorito a la derecha. */
 @Composable
-fun PokedexHeader(pokemon: Pokemon, modifier: Modifier = Modifier) {
+fun PokedexHeader(pokemon: PokemonSummary, modifier: Modifier = Modifier) {
     Box(modifier.fillMaxWidth()) {
         // El número queda alineado al final del nombre
         Column(
