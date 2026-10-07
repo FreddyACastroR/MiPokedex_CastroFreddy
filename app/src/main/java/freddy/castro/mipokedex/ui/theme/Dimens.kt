@@ -25,8 +25,30 @@ object Dimens {
     val RowPadding = 10.dp
     val RowImageWidth = 80.dp
     val RowTextSpacing = 2.dp
-    val NumberPaddingHorizontal = 5.dp
-    val NumberPaddingVertical = 2.dp
+
+    // Círculo con el número del Pokémon
+    val NumberChipSize = 30.dp
+    val NumberChipPadding = 5.dp
+
+    // Pokémon favorito
+    val FavoritePaddingVertical = 15.dp
+    val FavoriteSpacing = 10.dp
+    val FavoriteImageWidth = 75.dp
+    val FavoriteImagePadding = 5.dp
+    val FavoriteBorderWidth = 5.dp
+    val FavoriteChipOffsetX = 10.dp
+    val FavoriteChipOffsetY = 12.dp
+
+    // Celda de la tabla de Pokémon
+    val CellPadding = 5.dp
+    val CellImageSize = 150.dp
+    val CellImagePadding = 10.dp
+
+    // Tabla de Pokémon
+    val GridPaddingHorizontal = 5.dp
+    val GridPaddingVertical = 20.dp
+    val GridSpacingHorizontal = 5.dp
+    val GridSpacingVertical = 10.dp
 
     // La pokébola se sale por la derecha de la pantalla
     val PokeballOffsetX = 20.dp

@@ -14,6 +14,12 @@ val PokedexTypography = Typography(
     headlineSmall = TextStyle(fontSize = 24.sp),
     // Descripción
     titleLarge = TextStyle(fontSize = 20.sp),
+    // Etiquetas de sección del menú
+    titleMedium = TextStyle(
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+    ),
     // Navegación entre Pokémon
     bodyMedium = TextStyle(fontSize = 14.sp),
     // Nombre del Pokémon en la lista

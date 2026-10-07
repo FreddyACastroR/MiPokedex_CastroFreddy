@@ -10,8 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import freddy.castro.mipokedex.data.pokemonList
-import freddy.castro.mipokedex.ui.components.MenuPokedex
+import freddy.castro.mipokedex.ui.screens.MenuPokedexScreen
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
 class PokedexList : ComponentActivity() {
@@ -22,12 +21,12 @@ class PokedexList : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = lightBars, navigationBarStyle = lightBars)
         setContent {
             MiPokedexTheme {
-                // El fondo del tema es amarillo; la lista va sobre blanco
+                // El fondo del tema es amarillo; el menú va sobre blanco
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.surface,
                 ) { innerPadding ->
-                    MenuPokedex(pokemonList, innerPadding)
+                    MenuPokedexScreen(innerPadding)
                 }
             }
         }

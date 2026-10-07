@@ -17,6 +17,10 @@
     <string name="row_weight">Weight: %1$s</string>
     <string name="cd_row_image">%1$s image</string>
 
+    <!-- Menú de la Pokédex -->
+    <string name="label_favorites">Mis Favoritos</string>
+    <string name="label_all_pokemons">Todos mis pokemones</string>
+
     <!-- Tipos -->
     <string name="type_electric">Eléctrico</string>
 
