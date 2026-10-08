@@ -16,8 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import freddy.castro.mipokedex.R
-import freddy.castro.mipokedex.data.PokedexData
-import freddy.castro.mipokedex.data.PokedexEntry
+import freddy.castro.mipokedex.data.bulbasaur
+import freddy.castro.mipokedex.domain.Pokemon
 import freddy.castro.mipokedex.ui.theme.Dimens
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
@@ -28,7 +28,7 @@ private const val ABILITY_WEIGHT = 0.445f
 
 /** Altura y Peso a la izquierda; Habilidad a la derecha, centrada respecto a ambas. */
 @Composable
-fun PokemonStats(entry: PokedexEntry, modifier: Modifier = Modifier) {
+fun PokemonStats(pokemon: Pokemon, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -37,12 +37,18 @@ fun PokemonStats(entry: PokedexEntry, modifier: Modifier = Modifier) {
             modifier = Modifier.weight(LABEL_WEIGHT + VALUE_WEIGHT),
             verticalArrangement = Arrangement.spacedBy(Dimens.StatsRowSpacing),
         ) {
-            StatRow(label = R.string.label_height, value = entry.height)
-            StatRow(label = R.string.label_weight, value = entry.weight)
+            StatRow(
+                label = R.string.label_height,
+                value = stringResource(R.string.pokemon_height, pokemon.height),
+            )
+            StatRow(
+                label = R.string.label_weight,
+                value = stringResource(R.string.pokemon_weight, pokemon.weight),
+            )
         }
         StatColumn(
             label = R.string.label_ability,
-            value = entry.ability,
+            value = pokemon.ability,
             modifier = Modifier
                 .weight(ABILITY_WEIGHT)
                 .padding(end = Dimens.MarginMedium),
@@ -52,7 +58,7 @@ fun PokemonStats(entry: PokedexEntry, modifier: Modifier = Modifier) {
 
 /** Estadística con la etiqueta a la izquierda del valor, alineados por su línea base. */
 @Composable
-fun StatRow(@StringRes label: Int, @StringRes value: Int, modifier: Modifier = Modifier) {
+fun StatRow(@StringRes label: Int, value: String, modifier: Modifier = Modifier) {
     Row(modifier) {
         StatLabel(
             text = label,
@@ -74,7 +80,7 @@ fun StatRow(@StringRes label: Int, @StringRes value: Int, modifier: Modifier = M
 
 /** Estadística con la etiqueta arriba del valor. */
 @Composable
-fun StatColumn(@StringRes label: Int, @StringRes value: Int, modifier: Modifier = Modifier) {
+fun StatColumn(@StringRes label: Int, value: String, modifier: Modifier = Modifier) {
     Column(modifier) {
         StatLabel(text = label)
         StatValue(text = value)
@@ -98,9 +104,9 @@ private fun StatLabel(
 }
 
 @Composable
-private fun StatValue(@StringRes text: Int, modifier: Modifier = Modifier) {
+private fun StatValue(text: String, modifier: Modifier = Modifier) {
     Text(
-        text = stringResource(text),
+        text = text,
         modifier = modifier,
         color = MaterialTheme.colorScheme.onSurface,
         style = MaterialTheme.typography.headlineSmall,
@@ -111,6 +117,6 @@ private fun StatValue(@StringRes text: Int, modifier: Modifier = Modifier) {
 @Composable
 private fun PokemonStatsPreview() {
     MiPokedexTheme {
-        PokemonStats(PokedexData.pikachuEntry)
+        PokemonStats(bulbasaur)
     }
 }

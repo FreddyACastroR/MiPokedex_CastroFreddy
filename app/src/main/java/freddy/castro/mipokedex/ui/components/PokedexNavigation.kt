@@ -2,6 +2,7 @@ package freddy.castro.mipokedex.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import freddy.castro.mipokedex.R
-import freddy.castro.mipokedex.data.PokedexData
-import freddy.castro.mipokedex.data.PokemonSummary
+import freddy.castro.mipokedex.data.pokemonList
+import freddy.castro.mipokedex.domain.Pokemon
 import freddy.castro.mipokedex.ui.theme.Dimens
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
@@ -28,11 +29,12 @@ enum class NavDirection(@DrawableRes val arrow: Int) {
     NEXT(R.drawable.ic_arrow_next),
 }
 
-/** Pokémon anterior en la esquina izquierda y siguiente en la derecha. */
+/** Pokémon anterior en la esquina izquierda y siguiente en la derecha; al tocarlos se abren. */
 @Composable
 fun PokedexNavigation(
-    previous: PokemonSummary,
-    next: PokemonSummary,
+    previous: Pokemon,
+    next: Pokemon,
+    onPokemonClick: (Pokemon) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -41,27 +43,27 @@ fun PokedexNavigation(
             .padding(Dimens.MarginSmall),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        NeighborPokemon(previous, NavDirection.PREVIOUS)
-        NeighborPokemon(next, NavDirection.NEXT)
+        NeighborPokemon(previous, NavDirection.PREVIOUS, onClick = { onPokemonClick(previous) })
+        NeighborPokemon(next, NavDirection.NEXT, onClick = { onPokemonClick(next) })
     }
 }
 
 /** Imagen de un Pokémon vecino con su nombre, número y la flecha de navegación. */
 @Composable
 fun NeighborPokemon(
-    pokemon: PokemonSummary,
+    pokemon: Pokemon,
     direction: NavDirection,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val name = stringResource(pokemon.name)
     Column(
-        modifier = modifier,
+        modifier = modifier.clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Dimens.MarginSmall),
     ) {
         Image(
             painter = painterResource(pokemon.image),
-            contentDescription = stringResource(R.string.cd_pokemon_image, name),
+            contentDescription = stringResource(R.string.cd_pokemon_image, pokemon.name),
             modifier = Modifier.size(Dimens.NeighborImageSize),
         )
         Row(
@@ -71,7 +73,7 @@ fun NeighborPokemon(
             val arrow = painterResource(direction.arrow)
             if (direction == NavDirection.PREVIOUS) Image(arrow, contentDescription = null)
             Text(
-                text = stringResource(R.string.neighbor_label, name, pokemon.number),
+                text = stringResource(R.string.neighbor_label, pokemon.name, pokemon.number),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium,
             )
@@ -84,6 +86,10 @@ fun NeighborPokemon(
 @Composable
 private fun PokedexNavigationPreview() {
     MiPokedexTheme {
-        PokedexNavigation(previous = PokedexData.arbok, next = PokedexData.raichu)
+        PokedexNavigation(
+            previous = pokemonList.last(),
+            next = pokemonList[1],
+            onPokemonClick = {},
+        )
     }
 }

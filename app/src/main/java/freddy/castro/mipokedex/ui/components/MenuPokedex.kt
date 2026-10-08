@@ -19,31 +19,31 @@ private const val GRID_COLUMNS = 3
 
 /** Lista de Pokémon: solo compone las filas que están a la vista. */
 @Composable
-fun MenuPokedex(pokemonList: List<Pokemon>) {
+fun MenuPokedex(pokemonList: List<Pokemon>, onPokemonClick: (Pokemon) -> Unit) {
     LazyColumn {
         // La llave le deja a Compose reutilizar cada fila aunque la lista cambie de orden
         items(pokemonList, key = { it.number }) { pokemon ->
-            PokemonRow(pokemon)
+            PokemonRow(pokemon, onClick = { onPokemonClick(pokemon) })
         }
     }
 }
 
 /** Fila de favoritos: se desliza a los lados y solo compone los que están a la vista. */
 @Composable
-fun FavoritesRow(favoriteList: List<Pokemon>) {
+fun FavoritesRow(favoriteList: List<Pokemon>, onPokemonClick: (Pokemon) -> Unit) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = Dimens.MarginMedium),
         horizontalArrangement = Arrangement.spacedBy(Dimens.MarginMedium),
     ) {
         items(favoriteList, key = { it.number }) { pokemon ->
-            FavoritePokemon(pokemon)
+            FavoritePokemon(pokemon, onClick = { onPokemonClick(pokemon) })
         }
     }
 }
 
 /** Tabla de Pokémon de tres columnas. */
 @Composable
-fun PokedexGrid(pokemonList: List<Pokemon>) {
+fun PokedexGrid(pokemonList: List<Pokemon>, onPokemonClick: (Pokemon) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(GRID_COLUMNS),
         contentPadding = PaddingValues(
@@ -54,7 +54,7 @@ fun PokedexGrid(pokemonList: List<Pokemon>) {
         horizontalArrangement = Arrangement.spacedBy(Dimens.GridSpacingHorizontal),
     ) {
         items(pokemonList, key = { it.number }) { pokemon ->
-            PokemonCell(pokemon)
+            PokemonCell(pokemon, onClick = { onPokemonClick(pokemon) })
         }
     }
 }
@@ -63,7 +63,7 @@ fun PokedexGrid(pokemonList: List<Pokemon>) {
 @Composable
 private fun MenuPokedexPreview() {
     MiPokedexTheme {
-        MenuPokedex(pokemonList)
+        MenuPokedex(pokemonList, onPokemonClick = {})
     }
 }
 
@@ -71,7 +71,7 @@ private fun MenuPokedexPreview() {
 @Composable
 private fun FavoritesRowPreview() {
     MiPokedexTheme {
-        FavoritesRow(pokemonList.filter { it.favorite })
+        FavoritesRow(pokemonList.filter { it.favorite }, onPokemonClick = {})
     }
 }
 
@@ -79,6 +79,6 @@ private fun FavoritesRowPreview() {
 @Composable
 private fun PokedexGridPreview() {
     MiPokedexTheme {
-        PokedexGrid(pokemonList)
+        PokedexGrid(pokemonList, onPokemonClick = {})
     }
 }

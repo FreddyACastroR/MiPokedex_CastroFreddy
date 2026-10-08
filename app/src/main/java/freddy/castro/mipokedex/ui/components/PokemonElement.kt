@@ -3,6 +3,7 @@ package freddy.castro.mipokedex.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,10 +41,11 @@ private val DescriptionLineHeight = 13.sp
 
 /** Fila de la lista: imagen a la izquierda, datos al centro y número a la derecha. */
 @Composable
-fun PokemonRow(pokemon: Pokemon) {
+fun PokemonRow(pokemon: Pokemon, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .padding(Dimens.RowPadding),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -84,10 +86,12 @@ fun PokemonRow(pokemon: Pokemon) {
 
 /** Favorito: imagen con marco del color de su tipo, número en la esquina y nombre abajo. */
 @Composable
-fun FavoritePokemon(pokemon: Pokemon) {
+fun FavoritePokemon(pokemon: Pokemon, onClick: () -> Unit) {
     val colors = getColorByType(pokemon.type)
     Column(
-        modifier = Modifier.padding(vertical = Dimens.FavoritePaddingVertical),
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(vertical = Dimens.FavoritePaddingVertical),
         verticalArrangement = Arrangement.spacedBy(Dimens.FavoriteSpacing),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -131,8 +135,12 @@ fun FavoritePokemon(pokemon: Pokemon) {
 
 /** Celda de la tabla: imagen grande, nombre abajo y número en la esquina de arriba. */
 @Composable
-fun PokemonCell(pokemon: Pokemon) {
-    Box(modifier = Modifier.padding(Dimens.CellPadding)) {
+fun PokemonCell(pokemon: Pokemon, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(Dimens.CellPadding),
+    ) {
         Column(
             modifier = Modifier.padding(Dimens.CellPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -161,7 +169,7 @@ fun PokemonCell(pokemon: Pokemon) {
 @Composable
 private fun PokemonRowPreview() {
     MiPokedexTheme {
-        PokemonRow(bulbasaur)
+        PokemonRow(bulbasaur, onClick = {})
     }
 }
 
@@ -169,7 +177,7 @@ private fun PokemonRowPreview() {
 @Composable
 private fun FavoritePokemonPreview() {
     MiPokedexTheme {
-        FavoritePokemon(bulbasaur)
+        FavoritePokemon(bulbasaur, onClick = {})
     }
 }
 
@@ -177,6 +185,6 @@ private fun FavoritePokemonPreview() {
 @Composable
 private fun PokemonCellPreview() {
     MiPokedexTheme {
-        PokemonCell(bulbasaur)
+        PokemonCell(bulbasaur, onClick = {})
     }
 }

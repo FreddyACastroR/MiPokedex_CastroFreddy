@@ -1,16 +1,15 @@
 <resources>
     <string name="app_name">MiPokedex</string>
 
-    <!-- Nombres -->
-    <string name="arbok">Arbok</string>
-    <string name="pikachu">Pikachu</string>
-    <string name="raichu">Raichu</string>
-
     <!-- Formatos que sirven para cualquier Pokémon -->
     <string name="pokemon_number">#%1$03d</string>
+    <string name="pokemon_height">%1$.1fm</string>
+    <string name="pokemon_weight">%1$.1fkg</string>
     <string name="neighbor_label">%1$s N.º %2$04d</string>
     <string name="cd_pokemon_image">Imagen de %1$s</string>
-    <string name="cd_favorite">Marcar como favorito</string>
+    <string name="cd_favorite">Favorito</string>
+    <string name="cd_not_favorite">No es favorito</string>
+    <string name="pokemon_not_found">No se encontró el Pokémon</string>
 
     <!-- Lista de Pokémon (sus datos vienen en inglés) -->
     <string name="row_height">Height: %1$s</string>
@@ -20,18 +19,11 @@
     <!-- Menú de la Pokédex -->
     <string name="label_favorites">Mis Favoritos</string>
     <string name="label_all_pokemons">Todos mis pokemones</string>
-
-    <!-- Tipos -->
-    <string name="type_electric">Eléctrico</string>
+    <string name="cd_view_list">Vista de lista</string>
+    <string name="cd_view_grid">Vista de tabla</string>
 
     <!-- Estadísticas -->
     <string name="label_height">Altura</string>
     <string name="label_weight">Peso</string>
     <string name="label_ability">Habilidad</string>
-
-    <!-- Ficha de Pikachu -->
-    <string name="pikachu_height">0,4m</string>
-    <string name="pikachu_weight">6,0kg</string>
-    <string name="pikachu_ability">Elec. Estática</string>
-    <string name="pikachu_description">Cuando se enfada, este Pokémon descarga la energía que almacena en el interior de las bolsas de las mejillas.</string>
 </resources>

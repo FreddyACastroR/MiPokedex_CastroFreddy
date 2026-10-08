@@ -6,10 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import freddy.castro.mipokedex.data.PokedexData
-import freddy.castro.mipokedex.ui.PokedexScreen
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
+import freddy.castro.mipokedex.ui.navigation.PokedexNavHost
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
+/** Única actividad de la app: las pantallas son composables y se cambian con navegación. */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +22,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = lightBars, navigationBarStyle = lightBars)
         setContent {
             MiPokedexTheme {
-                PokedexScreen(PokedexData.pikachuEntry)
+                // El fondo del tema es amarillo; el menú va sobre blanco
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = MaterialTheme.colorScheme.surface,
+                ) { innerPadding ->
+                    PokedexNavHost(innerPadding)
+                }
             }
         }
     }

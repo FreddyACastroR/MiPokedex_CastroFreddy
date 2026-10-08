@@ -19,6 +19,7 @@ import freddy.castro.mipokedex.ui.theme.OffWhite
 import freddy.castro.mipokedex.ui.theme.Poison
 import freddy.castro.mipokedex.ui.theme.Psych
 import freddy.castro.mipokedex.ui.theme.Rock
+import freddy.castro.mipokedex.ui.theme.Steel
 import freddy.castro.mipokedex.ui.theme.Water
 
 /**
@@ -40,6 +41,7 @@ fun getColorByType(type: String): Pair<Color, Color> =
         "Rock" -> Rock to OffWhite
         "Dragon" -> Dragon to OffWhite
         "Dark" -> Dark to OffWhite
+        "Steel" -> Steel to OffWhite
         "Electric" -> Electric to DarkGray
         "Fairy" -> Fairy to DarkGray
         "Fight", "Fighting" -> Fight to DarkGray

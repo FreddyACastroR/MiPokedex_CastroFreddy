@@ -4,11 +4,16 @@ import androidx.compose.ui.graphics.Color
 
 val PokedexYellow = Color(0xFFEDD22F)
 val PokedexRed = Color(0xFFD32027)
-val TypeElectric = Color(0xFFF5E633)
 
 val TextPrimary = Color(0xFF3C3C3C)
 val TextSecondary = Color(0xFF555555)
 val TextNumber = Color(0xFF444444)
+
+// Interruptor de lista/tabla: verde encendido, azul apagado
+val Green = Color(0xFF81CA85)
+val LightGreen = Color(0xFFCCFFCE)
+val Blue = Color(0xFF4D92D2)
+val LightBlue = Color(0xFFA5CEFD)
 
 val OffWhite = Color(0xFFFAFAFA)
 val DarkGray = Color(0xFF1F1F1F)
@@ -30,3 +35,4 @@ val Dragon = Color(0xFF3949AB)
 val Dark = Color(0xFF131310)
 val Ice = Color(0xFF9FA8DA)
 val Fairy = Color(0xFFEF9A9A)
+val Steel = Color(0xFF546E7A)

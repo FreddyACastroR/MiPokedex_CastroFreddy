@@ -16,14 +16,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import freddy.castro.mipokedex.R
-import freddy.castro.mipokedex.data.PokedexData
-import freddy.castro.mipokedex.data.PokemonSummary
+import freddy.castro.mipokedex.data.bulbasaur
+import freddy.castro.mipokedex.domain.Pokemon
 import freddy.castro.mipokedex.ui.theme.Dimens
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
 /** Nombre y número del Pokémon a la izquierda y la estrella de favorito a la derecha. */
 @Composable
-fun PokedexHeader(pokemon: PokemonSummary, modifier: Modifier = Modifier) {
+fun PokedexHeader(pokemon: Pokemon, modifier: Modifier = Modifier) {
     Box(modifier.fillMaxWidth()) {
         // El número queda alineado al final del nombre
         Column(
@@ -31,7 +31,7 @@ fun PokedexHeader(pokemon: PokemonSummary, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.End,
         ) {
             Text(
-                text = stringResource(pokemon.name),
+                text = pokemon.name,
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.headlineLarge,
             )
@@ -41,9 +41,14 @@ fun PokedexHeader(pokemon: PokemonSummary, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineSmall,
             )
         }
+        // Estrella rellena si es favorito y solo el contorno si no lo es
         Image(
-            painter = painterResource(R.drawable.ic_star),
-            contentDescription = stringResource(R.string.cd_favorite),
+            painter = painterResource(
+                if (pokemon.favorite) R.drawable.ic_star else R.drawable.ic_star_border,
+            ),
+            contentDescription = stringResource(
+                if (pokemon.favorite) R.string.cd_favorite else R.string.cd_not_favorite,
+            ),
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(Dimens.MarginSmall)
@@ -57,7 +62,7 @@ fun PokedexHeader(pokemon: PokemonSummary, modifier: Modifier = Modifier) {
 private fun PokedexHeaderPreview() {
     MiPokedexTheme {
         PokedexHeader(
-            pokemon = PokedexData.pikachu,
+            pokemon = bulbasaur,
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
         )
     }
