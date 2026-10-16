@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import freddy.castro.mipokedex.data.pokemonList
 import freddy.castro.mipokedex.domain.Pokemon
 import freddy.castro.mipokedex.ui.theme.Dimens
@@ -17,10 +19,17 @@ import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
 private const val GRID_COLUMNS = 3
 
-/** Lista de Pokémon: solo compone las filas que están a la vista. */
+/**
+ * Lista de Pokémon: solo compone las filas que están a la vista. [bottomPadding] deja
+ * espacio después de la última fila para que un botón flotante no la tape.
+ */
 @Composable
-fun MenuPokedex(pokemonList: List<Pokemon>, onPokemonClick: (Pokemon) -> Unit) {
-    LazyColumn {
+fun MenuPokedex(
+    pokemonList: List<Pokemon>,
+    onPokemonClick: (Pokemon) -> Unit,
+    bottomPadding: Dp = 0.dp,
+) {
+    LazyColumn(contentPadding = PaddingValues(bottom = bottomPadding)) {
         // La llave le deja a Compose reutilizar cada fila aunque la lista cambie de orden
         items(pokemonList, key = { it.number }) { pokemon ->
             PokemonRow(pokemon, onClick = { onPokemonClick(pokemon) })
@@ -41,14 +50,20 @@ fun FavoritesRow(favoriteList: List<Pokemon>, onPokemonClick: (Pokemon) -> Unit)
     }
 }
 
-/** Tabla de Pokémon de tres columnas. */
+/** Tabla de Pokémon de tres columnas; [bottomPadding] funciona igual que en [MenuPokedex]. */
 @Composable
-fun PokedexGrid(pokemonList: List<Pokemon>, onPokemonClick: (Pokemon) -> Unit) {
+fun PokedexGrid(
+    pokemonList: List<Pokemon>,
+    onPokemonClick: (Pokemon) -> Unit,
+    bottomPadding: Dp = 0.dp,
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(GRID_COLUMNS),
         contentPadding = PaddingValues(
-            horizontal = Dimens.GridPaddingHorizontal,
-            vertical = Dimens.GridPaddingVertical,
+            start = Dimens.GridPaddingHorizontal,
+            top = Dimens.GridPaddingVertical,
+            end = Dimens.GridPaddingHorizontal,
+            bottom = Dimens.GridPaddingVertical + bottomPadding,
         ),
         verticalArrangement = Arrangement.spacedBy(Dimens.GridSpacingVertical),
         horizontalArrangement = Arrangement.spacedBy(Dimens.GridSpacingHorizontal),

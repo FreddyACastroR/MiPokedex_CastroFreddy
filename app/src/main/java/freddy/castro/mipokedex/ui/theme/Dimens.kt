@@ -53,4 +53,14 @@ object Dimens {
     // La pokébola se sale por la derecha de la pantalla
     val PokeballOffsetX = 20.dp
     val PokeballOffsetY = 44.dp
+
+    // Botón flotante del menú; las listas dejan este espacio al final para que no las tape
+    val FabIconSize = 24.dp
+    val FabSpace = 88.dp
+
+    // Zona de la hierba en la cacería
+    val EncounterHeight = 280.dp
+    val EncounterCornerRadius = 24.dp
+    val EncounterBorderWidth = 2.dp
+    val EncounterIdleImageSize = 96.dp
 }

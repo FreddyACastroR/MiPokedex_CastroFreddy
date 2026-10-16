@@ -1,11 +1,14 @@
 package freddy.castro.mipokedex.ui.screens
 
-import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -14,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,6 +31,7 @@ import freddy.castro.mipokedex.domain.Pokemon
 import freddy.castro.mipokedex.ui.components.FavoritesRow
 import freddy.castro.mipokedex.ui.components.MenuPokedex
 import freddy.castro.mipokedex.ui.components.PokedexGrid
+import freddy.castro.mipokedex.ui.components.SectionLabel
 import freddy.castro.mipokedex.ui.theme.Blue
 import freddy.castro.mipokedex.ui.theme.Dimens
 import freddy.castro.mipokedex.ui.theme.Green
@@ -38,41 +41,64 @@ import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
 /**
  * Pantalla del menú: los favoritos en una fila arriba y todos los Pokémon abajo, en lista
- * o en tabla según el interruptor. Al tocar cualquiera se avisa con [onPokemonClick].
+ * o en tabla según el interruptor. Al tocar cualquiera se avisa con [onPokemonClick], y el
+ * botón flotante avisa con [onHuntClick].
  */
 @Composable
-fun MenuPokedexScreen(innerPadding: PaddingValues, onPokemonClick: (Pokemon) -> Unit) {
-    // La lista no cambia, así que los favoritos se filtran una sola vez
-    val favoriteList = remember { pokemonList.filter { it.favorite } }
+fun MenuPokedexScreen(
+    innerPadding: PaddingValues,
+    pokemonList: List<Pokemon>,
+    favoriteList: List<Pokemon>,
+    onPokemonClick: (Pokemon) -> Unit,
+    onHuntClick: () -> Unit,
+) {
     // Saveable para que la vista elegida siga ahí al volver del detalle o girar la pantalla
     var grid by rememberSaveable { mutableStateOf(false) }
-    Column(modifier = Modifier.padding(innerPadding)) {
-        SectionLabel(R.string.label_favorites, Modifier.padding(top = Dimens.MarginMedium))
-        FavoritesRow(favoriteList, onPokemonClick)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            SectionLabel(R.string.label_all_pokemons, Modifier.weight(1f))
-            ViewSwitch(
-                grid = grid,
-                onGridChange = { grid = it },
-                modifier = Modifier.padding(end = Dimens.MarginMedium),
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding),
+    ) {
+        Column {
+            SectionLabel(
+                text = stringResource(R.string.label_favorites),
+                modifier = Modifier.padding(top = Dimens.MarginMedium),
             )
+            if (favoriteList.isEmpty()) {
+                // Sin favoritos la fila quedaría vacía; mejor se explica cómo agregarlos
+                Text(
+                    text = stringResource(R.string.favorites_empty),
+                    modifier = Modifier.padding(Dimens.MarginMedium),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            } else {
+                FavoritesRow(favoriteList, onPokemonClick)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                SectionLabel(
+                    text = stringResource(R.string.label_all_pokemons),
+                    modifier = Modifier.weight(1f),
+                )
+                ViewSwitch(
+                    grid = grid,
+                    onGridChange = { grid = it },
+                    modifier = Modifier.padding(end = Dimens.MarginMedium),
+                )
+            }
+            if (grid) {
+                PokedexGrid(pokemonList, onPokemonClick, bottomPadding = Dimens.FabSpace)
+            } else {
+                MenuPokedex(pokemonList, onPokemonClick, bottomPadding = Dimens.FabSpace)
+            }
         }
-        if (grid) {
-            PokedexGrid(pokemonList, onPokemonClick)
-        } else {
-            MenuPokedex(pokemonList, onPokemonClick)
-        }
+        HuntButton(
+            onClick = onHuntClick,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(Dimens.MarginMedium),
+        )
     }
-}
-
-/** Etiqueta que encabeza cada sección de la pantalla. */
-@Composable
-private fun SectionLabel(@StringRes text: Int, modifier: Modifier = Modifier) {
-    Text(
-        text = stringResource(text),
-        modifier = modifier.padding(horizontal = Dimens.MarginMedium),
-        style = MaterialTheme.typography.titleMedium,
-    )
 }
 
 /** Interruptor de la vista: apagado muestra la lista y encendido la tabla. */
@@ -106,10 +132,37 @@ private fun ViewSwitch(
     )
 }
 
+/** Botón flotante amarillo, como la Pokédex, que lleva a la cacería. */
+@Composable
+private fun HuntButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.primary,
+        // onPrimary es blanco y no se lee sobre el amarillo
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        icon = {
+            // Image y no Icon: la pokébola conserva sus colores
+            Image(
+                painter = painterResource(R.drawable.ic_pokeball),
+                contentDescription = null,
+                modifier = Modifier.size(Dimens.FabIconSize),
+            )
+        },
+        text = { Text(stringResource(R.string.go_hunt)) },
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun MenuPokedexScreenPreview() {
     MiPokedexTheme {
-        MenuPokedexScreen(PaddingValues(), onPokemonClick = {})
+        MenuPokedexScreen(
+            innerPadding = PaddingValues(),
+            pokemonList = pokemonList,
+            favoriteList = pokemonList.filter { it.favorite },
+            onPokemonClick = {},
+            onHuntClick = {},
+        )
     }
 }

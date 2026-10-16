@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -36,6 +35,7 @@ import freddy.castro.mipokedex.ui.components.PokemonStats
 import freddy.castro.mipokedex.ui.components.TypeChips
 import freddy.castro.mipokedex.ui.theme.Dimens
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
+import freddy.castro.mipokedex.ui.viewmodel.PokemonDetailState
 
 // Fracciones del alto de la pantalla (debajo de la barra de estado)
 private const val CARD_TOP = 0.29f
@@ -46,23 +46,24 @@ private const val IMAGE_BOTTOM = 0.335f
 private val DescriptionAlignment = BiasAlignment.Vertical(-0.5f)
 
 /**
- * Detalle del Pokémon cuyo número es [pokemonId], con sus vecinos de la lista abajo.
- * Al tocar un vecino se avisa con [onNeighborClick].
+ * Detalle de un Pokémon con sus vecinos de la lista abajo; si [detail] es null, el Pokémon
+ * no existe. Al tocar la estrella se avisa con [onFavoriteClick] y al tocar un vecino con
+ * [onNeighborClick].
  */
 @Composable
 fun PokemonDetailScreen(
-    pokemonId: Int,
+    detail: PokemonDetailState?,
+    onFavoriteClick: () -> Unit,
     onNeighborClick: (Pokemon) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val index = remember(pokemonId) { pokemonList.indexOfFirst { it.number == pokemonId } }
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding(),
     ) {
-        if (index == -1) {
+        if (detail == null) {
             Text(
                 text = stringResource(R.string.pokemon_not_found),
                 modifier = Modifier.align(Alignment.Center),
@@ -70,11 +71,11 @@ fun PokemonDetailScreen(
                 style = MaterialTheme.typography.titleLarge,
             )
         } else {
-            // La lista da la vuelta: antes del primero va el último, y después del último el primero
             PokemonDetail(
-                pokemon = pokemonList[index],
-                previous = pokemonList[(index - 1).mod(pokemonList.size)],
-                next = pokemonList[(index + 1).mod(pokemonList.size)],
+                pokemon = detail.pokemon,
+                previous = detail.previous,
+                next = detail.next,
+                onFavoriteClick = onFavoriteClick,
                 onNeighborClick = onNeighborClick,
             )
         }
@@ -90,6 +91,7 @@ private fun BoxScope.PokemonDetail(
     pokemon: Pokemon,
     previous: Pokemon,
     next: Pokemon,
+    onFavoriteClick: () -> Unit,
     onNeighborClick: (Pokemon) -> Unit,
 ) {
     Image(
@@ -119,7 +121,7 @@ private fun BoxScope.PokemonDetail(
         )
         PokedexNavigation(previous = previous, next = next, onPokemonClick = onNeighborClick)
     }
-    PokedexHeader(pokemon)
+    PokedexHeader(pokemon, onFavoriteClick)
     PokemonPortrait(pokemon)
 }
 
@@ -146,6 +148,14 @@ private fun PokemonPortrait(pokemon: Pokemon, modifier: Modifier = Modifier) {
 @Composable
 private fun PokemonDetailScreenPreview() {
     MiPokedexTheme {
-        PokemonDetailScreen(pokemonId = bulbasaur.number, onNeighborClick = {})
+        PokemonDetailScreen(
+            detail = PokemonDetailState(
+                pokemon = bulbasaur,
+                previous = pokemonList.last(),
+                next = pokemonList[1],
+            ),
+            onFavoriteClick = {},
+            onNeighborClick = {},
+        )
     }
 }
