@@ -10,6 +10,13 @@
     <string name="cd_favorite">Favorito</string>
     <string name="pokemon_not_found">No se encontró el Pokémon</string>
 
+    <!-- Inicio de sesión -->
+    <string name="login_email">Correo electrónico</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="cd_show_password">Mostrar contraseña</string>
+    <string name="cd_hide_password">Ocultar contraseña</string>
+
     <!-- Lista de Pokémon (sus datos vienen en inglés) -->
     <string name="row_height">Height: %1$s</string>
     <string name="row_weight">Weight: %1$s</string>
@@ -22,6 +29,7 @@
     <string name="cd_view_grid">Vista de tabla</string>
     <string name="favorites_empty">Toca la estrella en el detalle de un Pokémon para agregarlo aquí</string>
     <string name="go_hunt">Ir a cazar</string>
+    <string name="logout">Cerrar sesión</string>
 
     <!-- Cacería -->
     <string name="label_tall_grass">Hierba alta</string>

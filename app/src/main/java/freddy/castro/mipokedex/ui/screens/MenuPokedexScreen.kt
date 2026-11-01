@@ -8,17 +8,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,29 +39,40 @@ import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
 /**
  * Pantalla del menú: los favoritos en una fila arriba y todos los Pokémon abajo, en lista
- * o en tabla según el interruptor. Al tocar cualquiera se avisa con [onPokemonClick], y el
- * botón flotante avisa con [onHuntClick].
+ * o en tabla según [grid]. Al tocar cualquiera se avisa con [onPokemonClick], el
+ * interruptor avisa con [onGridChange], el botón flotante con [onHuntClick] y el de arriba a
+ * la derecha con [onLogoutClick].
  */
 @Composable
 fun MenuPokedexScreen(
     innerPadding: PaddingValues,
     pokemonList: List<Pokemon>,
     favoriteList: List<Pokemon>,
+    grid: Boolean,
+    onGridChange: (Boolean) -> Unit,
     onPokemonClick: (Pokemon) -> Unit,
     onHuntClick: () -> Unit,
+    onLogoutClick: () -> Unit,
 ) {
-    // Saveable para que la vista elegida siga ahí al volver del detalle o girar la pantalla
-    var grid by rememberSaveable { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding),
     ) {
         Column {
-            SectionLabel(
-                text = stringResource(R.string.label_favorites),
-                modifier = Modifier.padding(top = Dimens.MarginMedium),
-            )
+            Row(
+                modifier = Modifier.padding(top = Dimens.MarginSmall),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                SectionLabel(
+                    text = stringResource(R.string.label_favorites),
+                    modifier = Modifier.weight(1f),
+                )
+                LogoutButton(
+                    onClick = onLogoutClick,
+                    modifier = Modifier.padding(end = Dimens.MarginSmall),
+                )
+            }
             if (favoriteList.isEmpty()) {
                 // Sin favoritos la fila quedaría vacía; mejor se explica cómo agregarlos
                 Text(
@@ -82,7 +91,7 @@ fun MenuPokedexScreen(
                 )
                 ViewSwitch(
                     grid = grid,
-                    onGridChange = { grid = it },
+                    onGridChange = onGridChange,
                     modifier = Modifier.padding(end = Dimens.MarginMedium),
                 )
             }
@@ -132,6 +141,20 @@ private fun ViewSwitch(
     )
 }
 
+/** Botón para cerrar la sesión, con letras rojas como el de iniciar sesión. */
+@Composable
+private fun LogoutButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier,
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = MaterialTheme.colorScheme.secondary,
+        ),
+    ) {
+        Text(stringResource(R.string.logout))
+    }
+}
+
 /** Botón flotante amarillo, como la Pokédex, que lleva a la cacería. */
 @Composable
 private fun HuntButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
@@ -161,8 +184,11 @@ private fun MenuPokedexScreenPreview() {
             innerPadding = PaddingValues(),
             pokemonList = pokemonList,
             favoriteList = pokemonList.filter { it.favorite },
+            grid = false,
+            onGridChange = {},
             onPokemonClick = {},
             onHuntClick = {},
+            onLogoutClick = {},
         )
     }
 }

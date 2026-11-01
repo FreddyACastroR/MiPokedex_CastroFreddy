@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-   Sample data extraction rules file; uncomment and customize as necessary.
+   Qué se respalda en la nube y qué se copia al cambiar de teléfono, en Android 12 y posteriores.
    See https://developer.android.com/about/versions/12/backup-restore#xml-changes
-   for details.
 -->
 <data-extraction-rules>
+    <!-- La sesión no pasa a otro teléfono ni regresa al reinstalar la app: entraría sin
+         pedir la contraseña -->
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <exclude domain="sharedpref" path="datosUsuario.xml" />
     </cloud-backup>
-    <!--
     <device-transfer>
-        <include .../>
-        <exclude .../>
+        <exclude domain="sharedpref" path="datosUsuario.xml" />
     </device-transfer>
-    -->
 </data-extraction-rules>

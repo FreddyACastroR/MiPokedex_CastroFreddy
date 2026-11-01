@@ -63,4 +63,8 @@ object Dimens {
     val EncounterCornerRadius = 24.dp
     val EncounterBorderWidth = 2.dp
     val EncounterIdleImageSize = 96.dp
+
+    // Inicio de sesión; con la pantalla acostada el formulario no se estira de lado a lado
+    val LoginLogoSize = 120.dp
+    val LoginFormMaxWidth = 480.dp
 }
