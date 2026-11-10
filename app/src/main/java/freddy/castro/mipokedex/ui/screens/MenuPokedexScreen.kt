@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
@@ -37,12 +38,6 @@ import freddy.castro.mipokedex.ui.theme.LightBlue
 import freddy.castro.mipokedex.ui.theme.LightGreen
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 
-/**
- * Pantalla del menú: los favoritos en una fila arriba y todos los Pokémon abajo, en lista
- * o en tabla según [grid]. Al tocar cualquiera se avisa con [onPokemonClick], el
- * interruptor avisa con [onGridChange], el botón flotante con [onHuntClick] y el de arriba a
- * la derecha con [onLogoutClick].
- */
 @Composable
 fun MenuPokedexScreen(
     innerPadding: PaddingValues,
@@ -50,10 +45,13 @@ fun MenuPokedexScreen(
     favoriteList: List<Pokemon>,
     grid: Boolean,
     onGridChange: (Boolean) -> Unit,
-    onPokemonClick: (Pokemon) -> Unit,
+    onPokemonClick: (Int) -> Unit,
+    onGuessClick: () -> Unit,
     onHuntClick: () -> Unit,
+    onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
 ) {
+    val openPokemon = { pokemon: Pokemon -> onPokemonClick(pokemon.number) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -68,13 +66,13 @@ fun MenuPokedexScreen(
                     text = stringResource(R.string.label_favorites),
                     modifier = Modifier.weight(1f),
                 )
+                ProfileButton(onClick = onProfileClick)
                 LogoutButton(
                     onClick = onLogoutClick,
                     modifier = Modifier.padding(end = Dimens.MarginSmall),
                 )
             }
             if (favoriteList.isEmpty()) {
-                // Sin favoritos la fila quedaría vacía; mejor se explica cómo agregarlos
                 Text(
                     text = stringResource(R.string.favorites_empty),
                     modifier = Modifier.padding(Dimens.MarginMedium),
@@ -82,7 +80,7 @@ fun MenuPokedexScreen(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             } else {
-                FavoritesRow(favoriteList, onPokemonClick)
+                FavoritesRow(favoriteList, openPokemon)
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 SectionLabel(
@@ -96,11 +94,17 @@ fun MenuPokedexScreen(
                 )
             }
             if (grid) {
-                PokedexGrid(pokemonList, onPokemonClick, bottomPadding = Dimens.FabSpace)
+                PokedexGrid(pokemonList, openPokemon, bottomPadding = Dimens.FabSpace)
             } else {
-                MenuPokedex(pokemonList, onPokemonClick, bottomPadding = Dimens.FabSpace)
+                MenuPokedex(pokemonList, openPokemon, bottomPadding = Dimens.FabSpace)
             }
         }
+        GuessButton(
+            onClick = onGuessClick,
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(Dimens.MarginMedium),
+        )
         HuntButton(
             onClick = onHuntClick,
             modifier = Modifier
@@ -110,7 +114,6 @@ fun MenuPokedexScreen(
     }
 }
 
-/** Interruptor de la vista: apagado muestra la lista y encendido la tabla. */
 @Composable
 private fun ViewSwitch(
     grid: Boolean,
@@ -121,7 +124,6 @@ private fun ViewSwitch(
         checked = grid,
         onCheckedChange = onGridChange,
         modifier = modifier,
-        // El ícono del círculo dice qué vista está puesta
         thumbContent = {
             Icon(
                 painter = painterResource(if (grid) R.drawable.ic_grid else R.drawable.ic_list),
@@ -141,7 +143,17 @@ private fun ViewSwitch(
     )
 }
 
-/** Botón para cerrar la sesión, con letras rojas como el de iniciar sesión. */
+@Composable
+private fun ProfileButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    IconButton(onClick = onClick, modifier = modifier) {
+        Icon(
+            painter = painterResource(R.drawable.ic_person),
+            contentDescription = stringResource(R.string.cd_profile),
+            tint = MaterialTheme.colorScheme.onSurface,
+        )
+    }
+}
+
 @Composable
 private fun LogoutButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     OutlinedButton(
@@ -155,17 +167,32 @@ private fun LogoutButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
-/** Botón flotante amarillo, como la Pokédex, que lleva a la cacería. */
+@Composable
+private fun GuessButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.secondary,
+        contentColor = MaterialTheme.colorScheme.onSecondary,
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_question),
+                contentDescription = null,
+                modifier = Modifier.size(Dimens.FabIconSize),
+            )
+        },
+        text = { Text(stringResource(R.string.go_guess)) },
+    )
+}
+
 @Composable
 private fun HuntButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     ExtendedFloatingActionButton(
         onClick = onClick,
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.primary,
-        // onPrimary es blanco y no se lee sobre el amarillo
         contentColor = MaterialTheme.colorScheme.onSurface,
         icon = {
-            // Image y no Icon: la pokébola conserva sus colores
             Image(
                 painter = painterResource(R.drawable.ic_pokeball),
                 contentDescription = null,
@@ -187,7 +214,9 @@ private fun MenuPokedexScreenPreview() {
             grid = false,
             onGridChange = {},
             onPokemonClick = {},
+            onGuessClick = {},
             onHuntClick = {},
+            onProfileClick = {},
             onLogoutClick = {},
         )
     }

@@ -14,7 +14,6 @@ import freddy.castro.mipokedex.ui.theme.Dimens
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 import freddy.castro.mipokedex.utilities.getColorByType
 
-/** Una etiqueta por cada tipo del Pokémon: "Grass/Poison" son dos. */
 @Composable
 fun TypeChips(types: String, modifier: Modifier = Modifier) {
     Row(
@@ -27,7 +26,6 @@ fun TypeChips(types: String, modifier: Modifier = Modifier) {
     }
 }
 
-/** Etiqueta redondeada con el nombre del tipo, pintada del color de ese tipo. */
 @Composable
 fun TypeChip(type: String, modifier: Modifier = Modifier) {
     val colors = getColorByType(type)

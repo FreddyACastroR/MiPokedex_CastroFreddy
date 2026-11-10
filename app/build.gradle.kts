@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    // Genera los serializadores de las rutas de navegación
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -23,7 +22,6 @@ android {
 
     buildTypes {
         release {
-            // R8 quita el código y los recursos que no se usan (Compose es mucho más rápido así)
             optimization {
                 enable = true
             }
@@ -48,8 +46,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.androidx.datastore.preferences)
     debugImplementation(libs.androidx.compose.ui.tooling)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
 }

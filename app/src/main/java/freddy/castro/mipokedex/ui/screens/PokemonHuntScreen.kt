@@ -32,7 +32,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import freddy.castro.mipokedex.R
 import freddy.castro.mipokedex.data.pokemonList
-import freddy.castro.mipokedex.domain.Pokemon
 import freddy.castro.mipokedex.ui.components.PokemonRow
 import freddy.castro.mipokedex.ui.components.SectionLabel
 import freddy.castro.mipokedex.ui.components.TypeChips
@@ -42,26 +41,18 @@ import freddy.castro.mipokedex.ui.theme.LightGreen
 import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 import freddy.castro.mipokedex.ui.viewmodel.PokedexState
 
-// El Pokémon que escapó se ve deslavado
 private const val ESCAPED_ALPHA = 0.35f
 
-// Se crea una sola vez en lugar de en cada recomposición
 private val EncounterShape = RoundedCornerShape(Dimens.EncounterCornerRadius)
 
-/**
- * Pantalla de cacería: la hierba con el Pokémon salvaje arriba, los botones para buscar y
- * capturar, y abajo el equipo de Pokémon capturados. Toda la lógica vive en el ViewModel;
- * esta pantalla solo muestra [state] y avisa de los toques.
- */
 @Composable
 fun PokemonHuntScreen(
     innerPadding: PaddingValues,
     state: PokedexState,
     onSearchClick: () -> Unit,
     onCaptureClick: () -> Unit,
-    onPokemonClick: (Pokemon) -> Unit,
+    onPokemonClick: (Int) -> Unit,
 ) {
-    // Todo se desliza junto: con la pantalla acostada la hierba no deja ver el equipo
     LazyColumn(modifier = Modifier.padding(innerPadding)) {
         item {
             SectionLabel(
@@ -101,15 +92,13 @@ fun PokemonHuntScreen(
                 )
             }
         } else {
-            // Sin llave: el mismo Pokémon puede estar varias veces en el equipo
             items(state.team) { pokemon ->
-                PokemonRow(pokemon, onClick = { onPokemonClick(pokemon) })
+                PokemonRow(pokemon, onClick = { onPokemonClick(pokemon.number) })
             }
         }
     }
 }
 
-/** La hierba muestra al Pokémon salvaje, cómo salió el último intento o una indicación. */
 @Composable
 private fun TallGrass(state: PokedexState, modifier: Modifier = Modifier) {
     Column(
@@ -149,7 +138,6 @@ private fun TallGrass(state: PokedexState, modifier: Modifier = Modifier) {
     }
 }
 
-/** Imagen del Pokémon en la hierba: ocupa el espacio que dejan los textos y sigue cuadrada. */
 @Composable
 private fun ColumnScope.EncounterImage(
     @DrawableRes image: Int,
@@ -175,7 +163,6 @@ private fun EncounterMessage(text: String) {
     )
 }
 
-/** Buscar siempre se puede; capturar solo cuando hay un Pokémon en la hierba. */
 @Composable
 private fun HuntButtons(
     canCapture: Boolean,
@@ -196,7 +183,6 @@ private fun HuntButtons(
         ) {
             Text(stringResource(R.string.hunt_search))
         }
-        // Rojo como la pokébola
         Button(
             onClick = onCaptureClick,
             modifier = Modifier.weight(1f),

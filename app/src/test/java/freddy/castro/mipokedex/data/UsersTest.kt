@@ -7,13 +7,30 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Cada prueba empieza con las preferencias vacías, como recién instalada la app. */
 class UsersTest {
 
     private val prefs = FakeSharedPreferences()
 
-    // Otro Users sobre el mismo archivo es como cerrar la app y volverla a abrir
     private fun users() = Users(FakeContext(prefs))
+
+    @Test
+    fun getUserEmailAndName_comeFromTheSavedSession() {
+        users().loginService("ash@pokedex.com", "pikachu")
+
+        assertEquals("ash@pokedex.com", users().getUserEmail())
+        assertEquals("Ash", users().getUserName())
+    }
+
+    @Test
+    fun getUserEmailAndName_withoutSession_areNull() {
+        val users = users()
+        users.loginService("misty@pokedex.com", "starmie")
+
+        users.logout()
+
+        assertNull(users.getUserEmail())
+        assertNull(users.getUserName())
+    }
 
     @Test
     fun getUserByMail_ignoresCaseAndSurroundingSpaces() {

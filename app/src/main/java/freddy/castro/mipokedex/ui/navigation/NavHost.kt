@@ -8,32 +8,25 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import freddy.castro.mipokedex.domain.Pokemon
 import freddy.castro.mipokedex.ui.screens.LoginScreen
 import freddy.castro.mipokedex.ui.screens.MenuPokedexScreen
 import freddy.castro.mipokedex.ui.screens.PokemonDetailScreen
 import freddy.castro.mipokedex.ui.screens.PokemonHuntScreen
+import freddy.castro.mipokedex.ui.screens.ProfileScreen
+import freddy.castro.mipokedex.ui.screens.WhoIsThatPokemonScreen
 import freddy.castro.mipokedex.ui.viewmodel.PokemonViewModel
 import freddy.castro.mipokedex.ui.viewmodel.UserViewModel
 
-/**
- * Rutas de la app: empieza en el login, que manda directo al menú si quedó una sesión
- * guardada, y del menú se abre la cacería o el detalle de cada Pokémon. Los ViewModel se
- * piden aquí, fuera del NavHost, para que sean de la actividad y las pantallas compartan los
- * mismos; si cada pantalla pidiera el suyo, el equipo se perdería al salir de la cacería.
- */
 @Composable
 fun PokedexNavHost(
     innerPadding: PaddingValues,
-    viewModel: PokemonViewModel = viewModel(),
+    viewModel: PokemonViewModel = viewModel(factory = PokemonViewModel.Factory),
     userViewModel: UserViewModel = viewModel(factory = UserViewModel.Factory),
 ) {
     val navController = rememberNavController()
-    // Con dos toques seguidos no se abre la misma pantalla dos veces
-    val openDetail = { pokemon: Pokemon ->
-        navController.navigate(PokemonDetail(pokemon.number)) { launchSingleTop = true }
+    val openDetail = { pokemonNumber: Int ->
+        navController.navigate(PokemonDetail(pokemonNumber)) { launchSingleTop = true }
     }
-    // Sin el login en la pila, "atrás" en el menú cierra la app
     val openMenu = {
         navController.navigate(PokemonList) {
             popUpTo<Login> { inclusive = true }
@@ -42,8 +35,6 @@ fun PokedexNavHost(
     }
     NavHost(navController = navController, startDestination = Login) {
         composable<Login> {
-            // Se revisa una sola vez, al llegar: si la sesión se inicia aquí mismo, el que
-            // lleva al menú es el botón
             val isLoggedIn = remember { userViewModel.isLoggedIn() }
             LoginScreen(
                 isLoggedIn = isLoggedIn,
@@ -64,11 +55,13 @@ fun PokedexNavHost(
                 grid = userViewModel.gridDisplay,
                 onGridChange = userViewModel::changeDisplay,
                 onPokemonClick = openDetail,
+                onGuessClick = {
+                    navController.navigate(WhoIsThatPokemon) { launchSingleTop = true }
+                },
                 onHuntClick = { navController.navigate(PokemonHunt) { launchSingleTop = true } },
+                onProfileClick = { navController.navigate(Profile) { launchSingleTop = true } },
                 onLogoutClick = {
                     userViewModel.logout()
-                    // Se vacía toda la pila: "atrás" en el login cierra la app y no regresa
-                    // a la Pokédex
                     navController.navigate(Login) {
                         popUpTo(navController.graph.id) { inclusive = true }
                     }
@@ -84,14 +77,23 @@ fun PokedexNavHost(
                 onPokemonClick = openDetail,
             )
         }
+        composable<WhoIsThatPokemon> {
+            WhoIsThatPokemonScreen(
+                innerPadding = innerPadding,
+                state = viewModel.whoIsThatState,
+                onGuessClick = viewModel::guessPokemon,
+                onNextClick = viewModel::nextMysteryPokemon,
+            )
+        }
+        composable<Profile> {
+            ProfileScreen()
+        }
         composable<PokemonDetail> { backStackEntry ->
-            val number = backStackEntry.toRoute<PokemonDetail>().pokemon
+            val detail: PokemonDetail = backStackEntry.toRoute()
             PokemonDetailScreen(
-                detail = viewModel.detailOf(number),
-                onFavoriteClick = { viewModel.toggleFavorite(number) },
-                onNeighborClick = { neighbor ->
-                    // El vecino reemplaza al detalle actual: "atrás" regresa a donde se abrió
-                    navController.navigate(PokemonDetail(neighbor.number)) {
+                pokemonNumber = detail.pokemon,
+                onNeighborClick = { neighborNumber ->
+                    navController.navigate(PokemonDetail(neighborNumber)) {
                         popUpTo<PokemonDetail> { inclusive = true }
                     }
                 },

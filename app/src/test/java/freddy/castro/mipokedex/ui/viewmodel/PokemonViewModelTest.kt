@@ -1,18 +1,19 @@
 package freddy.castro.mipokedex.ui.viewmodel
 
+import freddy.castro.mipokedex.data.PokemonRepository
 import freddy.castro.mipokedex.data.pokemonList
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Con probabilidad 1 la pokébola siempre atrapa y con 0 el Pokémon siempre escapa. */
 class PokemonViewModelTest {
 
     private fun viewModel(captureChance: Float = 1f) =
-        PokemonViewModel(pokemonList, captureChance)
+        PokemonViewModel(PokemonRepository(pokemonList), captureChance)
 
     @Test
     fun favorites_onlyContainsFavoritePokemon() {
@@ -23,33 +24,16 @@ class PokemonViewModelTest {
     }
 
     @Test
-    fun toggleFavorite_addsAndRemovesFromFavorites() {
-        val viewModel = viewModel()
+    fun favorites_followTheFavoritesOfTheRepository() {
+        val repository = PokemonRepository(pokemonList)
+        val viewModel = PokemonViewModel(repository)
         val bulbasaur = pokemonList.first()
 
-        viewModel.toggleFavorite(bulbasaur.number)
+        repository.toggleFavorite(bulbasaur.number)
         assertTrue(viewModel.favorites.any { it.number == bulbasaur.number })
-        assertTrue(viewModel.detailOf(bulbasaur.number)!!.pokemon.favorite)
 
-        viewModel.toggleFavorite(bulbasaur.number)
+        repository.toggleFavorite(bulbasaur.number)
         assertFalse(viewModel.favorites.any { it.number == bulbasaur.number })
-    }
-
-    @Test
-    fun detailOf_wrapsAroundAtTheEnds() {
-        val viewModel = viewModel()
-
-        val first = viewModel.detailOf(pokemonList.first().number)!!
-        assertEquals(pokemonList.last(), first.previous)
-        assertEquals(pokemonList[1], first.next)
-
-        val last = viewModel.detailOf(pokemonList.last().number)!!
-        assertEquals(pokemonList.first(), last.next)
-    }
-
-    @Test
-    fun detailOf_unknownNumber_isNull() {
-        assertNull(viewModel().detailOf(-1))
     }
 
     @Test
@@ -126,5 +110,116 @@ class PokemonViewModelTest {
 
         assertNull(viewModel.pokedexState.escaped)
         assertNull(viewModel.pokedexState.lastCaptured)
+    }
+
+    @Test
+    fun searchPokemon_withoutPokemon_doesNothing() {
+        val viewModel = PokemonViewModel(PokemonRepository(emptyList()))
+
+        viewModel.searchPokemon()
+
+        assertEquals(PokedexState(), viewModel.pokedexState)
+    }
+
+    @Test
+    fun whoIsThat_startsWithAMysteryAndFourDifferentOptions() {
+        val state = viewModel().whoIsThatState
+
+        val mystery = state.mystery
+        assertNotNull(mystery)
+        assertTrue(mystery in pokemonList)
+        assertEquals(4, state.options.size)
+        assertEquals(4, state.options.map { it.number }.distinct().size)
+        assertTrue(mystery in state.options)
+        assertFalse(state.revealed)
+        assertEquals(0, state.rounds)
+    }
+
+    @Test
+    fun guessPokemon_right_countsAHit() {
+        val viewModel = viewModel()
+        val mystery = viewModel.whoIsThatState.mystery!!
+
+        viewModel.guessPokemon(mystery)
+
+        val state = viewModel.whoIsThatState
+        assertTrue(state.revealed)
+        assertTrue(state.isCorrect)
+        assertEquals(1, state.hits)
+        assertEquals(1, state.rounds)
+    }
+
+    @Test
+    fun guessPokemon_wrong_countsTheRoundButNotAHit() {
+        val viewModel = viewModel()
+        val state = viewModel.whoIsThatState
+        val wrong = state.options.first { it != state.mystery }
+
+        viewModel.guessPokemon(wrong)
+
+        val answered = viewModel.whoIsThatState
+        assertTrue(answered.revealed)
+        assertFalse(answered.isCorrect)
+        assertEquals(0, answered.hits)
+        assertEquals(1, answered.rounds)
+    }
+
+    @Test
+    fun guessPokemon_onlyTheFirstAnswerCounts() {
+        val viewModel = viewModel()
+        val state = viewModel.whoIsThatState
+        val wrong = state.options.first { it != state.mystery }
+
+        viewModel.guessPokemon(wrong)
+        viewModel.guessPokemon(state.mystery!!)
+
+        assertEquals(wrong, viewModel.whoIsThatState.guess)
+        assertEquals(0, viewModel.whoIsThatState.hits)
+        assertEquals(1, viewModel.whoIsThatState.rounds)
+    }
+
+    @Test
+    fun guessPokemon_stillRight_afterMarkingItAsFavorite() {
+        val repository = PokemonRepository(pokemonList)
+        val viewModel = PokemonViewModel(repository)
+        val mystery = viewModel.whoIsThatState.mystery!!
+
+        repository.toggleFavorite(mystery.number)
+        viewModel.guessPokemon(repository.getPokemon(mystery.number)!!)
+
+        assertTrue(viewModel.whoIsThatState.isCorrect)
+    }
+
+    @Test
+    fun nextMysteryPokemon_hidesAnotherOneAndKeepsTheScore() {
+        val viewModel = viewModel()
+        val first = viewModel.whoIsThatState.mystery!!
+        viewModel.guessPokemon(first)
+
+        viewModel.nextMysteryPokemon()
+
+        val state = viewModel.whoIsThatState
+        assertNotEquals(first.number, state.mystery!!.number)
+        assertFalse(state.revealed)
+        assertEquals(1, state.hits)
+        assertEquals(1, state.rounds)
+    }
+
+    @Test
+    fun whoIsThat_withFewPokemon_offersAllOfThem() {
+        val two = pokemonList.take(2)
+        val state = PokemonViewModel(PokemonRepository(two)).whoIsThatState
+
+        assertEquals(two.toSet(), state.options.toSet())
+    }
+
+    @Test
+    fun whoIsThat_withoutPokemon_hasNothingToGuess() {
+        val viewModel = PokemonViewModel(PokemonRepository(emptyList()))
+
+        viewModel.nextMysteryPokemon()
+        viewModel.guessPokemon(pokemonList.first())
+
+        assertEquals(WhoIsThatPokemonState(), viewModel.whoIsThatState)
     }
 }

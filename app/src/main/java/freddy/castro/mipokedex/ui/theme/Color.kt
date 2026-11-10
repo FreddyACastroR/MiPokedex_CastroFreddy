@@ -17,6 +17,9 @@ val LightBlue = Color(0xFFA5CEFD)
 
 val OffWhite = Color(0xFFFAFAFA)
 val DarkGray = Color(0xFF1F1F1F)
+
+// Sombra con la que se esconde al Pokémon de "¿Quién es ese Pokémon?"
+val Silhouette = Color(0xFF1B2433)
 //typeColors
 val Electric = Color(0xFFFFEB3B)
 val Grass = Color(0xFF43A047)
