@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import freddy.castro.mipokedex.ui.screens.AddPokemonScreen
 import freddy.castro.mipokedex.ui.screens.LoginScreen
 import freddy.castro.mipokedex.ui.screens.MenuPokedexScreen
 import freddy.castro.mipokedex.ui.screens.PokemonDetailScreen
@@ -60,6 +61,7 @@ fun PokedexNavHost(
                 },
                 onHuntClick = { navController.navigate(PokemonHunt) { launchSingleTop = true } },
                 onProfileClick = { navController.navigate(Profile) { launchSingleTop = true } },
+                onAddClick = { navController.navigate(AddPokemon) { launchSingleTop = true } },
                 onLogoutClick = {
                     userViewModel.logout()
                     navController.navigate(Login) {
@@ -87,6 +89,9 @@ fun PokedexNavHost(
         }
         composable<Profile> {
             ProfileScreen()
+        }
+        composable<AddPokemon> {
+            AddPokemonScreen(innerPadding = innerPadding)
         }
         composable<PokemonDetail> { backStackEntry ->
             val detail: PokemonDetail = backStackEntry.toRoute()

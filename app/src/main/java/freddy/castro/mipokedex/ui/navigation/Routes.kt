@@ -18,4 +18,7 @@ data object WhoIsThatPokemon
 data object Profile
 
 @Serializable
+data object AddPokemon
+
+@Serializable
 data class PokemonDetail(val pokemon: Int)

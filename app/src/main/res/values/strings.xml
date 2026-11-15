@@ -28,6 +28,17 @@
     <string name="go_guess">¿Quién es?</string>
     <string name="logout">Cerrar sesión</string>
     <string name="cd_profile">Mi perfil</string>
+    <string name="cd_add_pokemon">Agregar Pokémon</string>
+
+    <string name="label_add_pokemon">Agregar Pokémon</string>
+    <string name="add_number">Número</string>
+    <string name="add_name">Nombre</string>
+    <string name="add_type">Tipo</string>
+    <string name="add_description">Descripción</string>
+    <string name="add_save">Guardar</string>
+    <string name="add_saved">¡Pokémon guardado!</string>
+    <string name="label_saved_pokemons">Guardados en la base de datos</string>
+    <string name="saved_empty">Aún no hay Pokémon guardados</string>
 
     <string name="select_partner">Seleccionar compañero</string>
     <string name="partner_badge">⭐ Es tu compañero</string>

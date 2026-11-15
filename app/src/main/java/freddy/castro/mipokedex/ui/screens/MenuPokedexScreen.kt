@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
@@ -49,6 +51,7 @@ fun MenuPokedexScreen(
     onGuessClick: () -> Unit,
     onHuntClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onAddClick: () -> Unit,
     onLogoutClick: () -> Unit,
 ) {
     val openPokemon = { pokemon: Pokemon -> onPokemonClick(pokemon.number) }
@@ -86,6 +89,10 @@ fun MenuPokedexScreen(
                 SectionLabel(
                     text = stringResource(R.string.label_all_pokemons),
                     modifier = Modifier.weight(1f),
+                )
+                AddButton(
+                    onClick = onAddClick,
+                    modifier = Modifier.padding(end = Dimens.MarginSmall),
                 )
                 ViewSwitch(
                     grid = grid,
@@ -141,6 +148,23 @@ private fun ViewSwitch(
             uncheckedBorderColor = Color.Transparent,
         ),
     )
+}
+
+@Composable
+private fun AddButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+    FilledIconButton(
+        onClick = onClick,
+        modifier = modifier,
+        colors = IconButtonDefaults.filledIconButtonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_add),
+            contentDescription = stringResource(R.string.cd_add_pokemon),
+        )
+    }
 }
 
 @Composable
@@ -217,6 +241,7 @@ private fun MenuPokedexScreenPreview() {
             onGuessClick = {},
             onHuntClick = {},
             onProfileClick = {},
+            onAddClick = {},
             onLogoutClick = {},
         )
     }
