@@ -9,7 +9,6 @@ val TextPrimary = Color(0xFF3C3C3C)
 val TextSecondary = Color(0xFF555555)
 val TextNumber = Color(0xFF444444)
 
-// Interruptor de lista/tabla: verde encendido, azul apagado
 val Green = Color(0xFF81CA85)
 val LightGreen = Color(0xFFCCFFCE)
 val Blue = Color(0xFF4D92D2)
@@ -18,9 +17,8 @@ val LightBlue = Color(0xFFA5CEFD)
 val OffWhite = Color(0xFFFAFAFA)
 val DarkGray = Color(0xFF1F1F1F)
 
-// Sombra con la que se esconde al Pokémon de "¿Quién es ese Pokémon?"
 val Silhouette = Color(0xFF1B2433)
-//typeColors
+
 val Electric = Color(0xFFFFEB3B)
 val Grass = Color(0xFF43A047)
 val Fire = Color(0xFFE74440)

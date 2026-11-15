@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">MiPokedex</string>
 
-    <!-- Formatos que sirven para cualquier Pokémon -->
     <string name="pokemon_number">#%1$03d</string>
     <string name="pokemon_height">%1$.1fm</string>
     <string name="pokemon_weight">%1$.1fkg</string>
@@ -10,19 +9,16 @@
     <string name="cd_favorite">Favorito</string>
     <string name="pokemon_not_found">No se encontró el Pokémon</string>
 
-    <!-- Inicio de sesión -->
     <string name="login_email">Correo electrónico</string>
     <string name="login_password">Contraseña</string>
     <string name="login_button">Iniciar sesión</string>
     <string name="cd_show_password">Mostrar contraseña</string>
     <string name="cd_hide_password">Ocultar contraseña</string>
 
-    <!-- Lista de Pokémon (sus datos vienen en inglés) -->
     <string name="row_height">Height: %1$s</string>
     <string name="row_weight">Weight: %1$s</string>
     <string name="cd_row_image">%1$s image</string>
 
-    <!-- Menú de la Pokédex -->
     <string name="label_favorites">Mis Favoritos</string>
     <string name="label_all_pokemons">Todos mis pokemones</string>
     <string name="cd_view_list">Vista de lista</string>
@@ -45,7 +41,6 @@
         <item quantity="other">%1$s lleva %2$d días siendo tu compañero</item>
     </plurals>
 
-    <!-- Cacería -->
     <string name="label_tall_grass">Hierba alta</string>
     <string name="label_team">Pokémon capturados (%1$d)</string>
     <string name="hunt_search">Buscar</string>
@@ -56,7 +51,6 @@
     <string name="hunt_escaped">¡%1$s escapó!</string>
     <string name="team_empty">Aún no has atrapado ningún Pokémon</string>
 
-    <!-- ¿Quién es ese Pokémon? -->
     <string name="guess_score">Aciertos: %1$d de %2$d</string>
     <string name="guess_question">¿Quién es ese Pokémon?</string>
     <string name="guess_correct">¡Correcto! Es %1$s</string>
@@ -64,7 +58,6 @@
     <string name="guess_next">Siguiente Pokémon</string>
     <string name="cd_mystery_pokemon">Silueta de un Pokémon misterioso</string>
 
-    <!-- Estadísticas -->
     <string name="label_height">Altura</string>
     <string name="label_weight">Peso</string>
     <string name="label_ability">Habilidad</string>

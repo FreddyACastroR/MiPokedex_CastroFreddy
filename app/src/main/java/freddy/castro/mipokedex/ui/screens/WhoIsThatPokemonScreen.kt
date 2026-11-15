@@ -51,31 +51,19 @@ import freddy.castro.mipokedex.ui.theme.MiPokedexTheme
 import freddy.castro.mipokedex.ui.theme.Silhouette
 import freddy.castro.mipokedex.ui.viewmodel.WhoIsThatPokemonState
 
-// El fondo es 4:3; el PNG es cuadrado y las franjas transparentes de arriba y abajo se recortan
 private const val BACKGROUND_RATIO = 4f / 3f
 
-// Centro del destello claro del fondo, como fracción del ancho y del alto de la imagen
 private const val BURST_CENTER_X = 0.31f
 private const val BURST_CENTER_Y = 0.36f
 
-// Alto del Pokémon como fracción del alto de la imagen: cabe en el destello
 private const val MYSTERY_SIZE = 0.6f
 
-// Lo que tarda en desvanecerse la sombra al revelar al Pokémon
 private const val REVEAL_MILLIS = 600
 
-// Los nombres se acomodan de dos en dos
 private const val OPTIONS_PER_ROW = 2
 
-// Se crea una sola vez en lugar de en cada recomposición
 private val GuessShape = RoundedCornerShape(Dimens.GuessCornerRadius)
 
-/**
- * "¿Quién es ese Pokémon?": el marcador, la silueta sobre el fondo del programa de televisión,
- * los nombres para adivinar y el botón para pasar al siguiente. Al contestar se revela el
- * Pokémon y se pinta de verde el nombre correcto y de rojo el que se eligió mal. Toda la
- * lógica vive en el ViewModel; esta pantalla solo muestra [state] y avisa de los toques.
- */
 @Composable
 fun WhoIsThatPokemonScreen(
     innerPadding: PaddingValues,
@@ -89,8 +77,6 @@ fun WhoIsThatPokemonScreen(
             .padding(innerPadding),
     ) {
         if (maxWidth > maxHeight) {
-            // Acostada, la imagen ocuparía toda la altura y los nombres quedarían abajo, fuera
-            // de la vista: mejor la imagen a la izquierda y lo demás a la derecha
             Row(
                 modifier = Modifier
                     .fillMaxSize()
@@ -113,7 +99,6 @@ fun WhoIsThatPokemonScreen(
                 }
             }
         } else {
-            // Parada todo va en una columna; si no cabe, se desliza
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -145,10 +130,6 @@ private fun Score(state: WhoIsThatPokemonState) {
     )
 }
 
-/**
- * El mensaje, los nombres y el botón para el siguiente. Se acomodan en la columna de quien lo
- * llama: debajo de la imagen si la pantalla está parada o junto a ella si está acostada.
- */
 @Composable
 private fun ColumnScope.Answers(
     state: WhoIsThatPokemonState,
@@ -157,7 +138,6 @@ private fun ColumnScope.Answers(
 ) {
     GuessMessage(state)
     GuessOptions(state = state, onGuessClick = onGuessClick)
-    // Amarillo como la Pokédex; onPrimary es blanco y no se lee sobre el amarillo
     Button(
         onClick = onNextClick,
         modifier = Modifier.fillMaxWidth(),
@@ -171,20 +151,13 @@ private fun ColumnScope.Answers(
     }
 }
 
-/**
- * El fondo de "¿Quién es ese Pokémon?" con el Pokémon en medio del destello: en sombra mientras
- * no se contesta y con sus colores cuando ya se [revealed].
- */
 @Composable
 private fun MysteryPokemon(pokemon: Pokemon, revealed: Boolean, modifier: Modifier = Modifier) {
-    // Al revelarlo la sombra se desvanece poco a poco; al pasar al siguiente vuelve de golpe
     val fading by animateFloatAsState(
         targetValue = if (revealed) 0f else 1f,
         animationSpec = if (revealed) tween(REVEAL_MILLIS) else snap(),
         label = "silhouette",
     )
-    // Sin revelar se usa la sombra completa, no la animada: así el Pokémon nuevo no se asoma
-    // en el cuadro en que la animación todavía no regresa
     val shadowAlpha = if (revealed) fading else 1f
     Box(
         modifier = modifier
@@ -198,7 +171,6 @@ private fun MysteryPokemon(pokemon: Pokemon, revealed: Boolean, modifier: Modifi
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.Crop,
         )
-        // Esta caja tiene el mismo centro que el destello, y el Pokémon va en medio de ella
         Box(
             modifier = Modifier
                 .fillMaxWidth(2 * BURST_CENTER_X)
@@ -207,7 +179,6 @@ private fun MysteryPokemon(pokemon: Pokemon, revealed: Boolean, modifier: Modifi
         ) {
             Image(
                 painter = painterResource(pokemon.image),
-                // El lector de pantalla tampoco dice el nombre antes de tiempo
                 contentDescription = if (revealed) {
                     stringResource(R.string.cd_pokemon_image, pokemon.name)
                 } else {
@@ -216,8 +187,6 @@ private fun MysteryPokemon(pokemon: Pokemon, revealed: Boolean, modifier: Modifi
                 modifier = Modifier
                     .fillMaxHeight(MYSTERY_SIZE / (2 * BURST_CENTER_Y))
                     .aspectRatio(1f),
-                // SrcAtop pinta la sombra solo donde está el Pokémon, y al bajarle la opacidad
-                // se van viendo sus colores
                 colorFilter = ColorFilter.tint(
                     Silhouette.copy(alpha = shadowAlpha),
                     BlendMode.SrcAtop,
@@ -227,7 +196,6 @@ private fun MysteryPokemon(pokemon: Pokemon, revealed: Boolean, modifier: Modifi
     }
 }
 
-/** La pregunta mientras no se contesta; después, si se acertó y quién era. */
 @Composable
 private fun GuessMessage(state: WhoIsThatPokemonState) {
     val mystery = state.mystery
@@ -238,7 +206,6 @@ private fun GuessMessage(state: WhoIsThatPokemonState) {
     }
     Text(
         text = text,
-        // El lector de pantalla anuncia el resultado en cuanto cambia
         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
         color = MaterialTheme.colorScheme.onSurface,
         textAlign = TextAlign.Center,
@@ -246,7 +213,6 @@ private fun GuessMessage(state: WhoIsThatPokemonState) {
     )
 }
 
-/** Los nombres de dos en dos. Ya contestada la ronda no se pueden tocar. */
 @Composable
 private fun GuessOptions(
     state: WhoIsThatPokemonState,
@@ -278,7 +244,6 @@ private fun GuessOptions(
     }
 }
 
-/** Al contestar se pinta de verde el nombre correcto y de rojo el que se eligió mal. */
 @Composable
 private fun optionColors(state: WhoIsThatPokemonState, pokemon: Pokemon): ButtonColors {
     val colors = MaterialTheme.colorScheme
